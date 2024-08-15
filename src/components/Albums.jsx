@@ -45,11 +45,14 @@ const Albums = ({ artist, albumname, albumImage, albumId }) => {
 
   const navigate = useNavigate();
 
-  const { setCurrentAlbum } = useContext(QueueContext);
+  const { setCurrentAlbum, setIsPlaylist, setIsArtist } =
+    useContext(QueueContext);
 
   const handleClick = () => {
     navigate(`/albums/${albumId}`);
     setCurrentAlbum(albumId);
+    setIsPlaylist(false);
+    setIsArtist(false);
   };
 
   return (

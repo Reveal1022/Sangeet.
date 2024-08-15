@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { getElements } from "../../api/Spotify";
 import { Navigate, useNavigate } from "react-router-dom";
+import { QueueContext } from "../../QueueContext";
 
 const TopArtists = () => {
   const [artist, setArtist] = useState();
@@ -22,6 +23,8 @@ const TopArtists = () => {
 
   const url = `https://api.spotify.com/v1/artists?ids=${ids.join(",")}`;
 
+  const { setCurrentAlbum, setIsArtist } = useContext(QueueContext);
+
   useEffect(() => {
     const fetchArtists = async () => {
       const data = await getElements(url);
@@ -42,6 +45,8 @@ const TopArtists = () => {
               key={artist.id}
               onClick={() => {
                 navigate(`/artist/${artist.id}`);
+                setCurrentAlbum(artist.id);
+                setIsArtist(true);
               }}
               className="hover:cursor-pointer p-3 hover:bg-[#CDD3D0] hover:rounded-md hover:shadow-md"
             >

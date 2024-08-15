@@ -51,7 +51,7 @@ const Header = () => {
       {showSearch && <Search show={showSearch} hideSearch={handleHideSearch} />}
 
       <div className="w-[50%] -[100%] flex items-center pl-[20px] ">
-        <NavLink className="shadow-md shadow-[#00000015]">
+        <NavLink className="">
           <button className="flex items-center text-slate-800 font-extrabold text-[16px] gap-1">
             <SiThesoundsresource className="text-[30px] text-slate-800" />
             <p>Sangeet</p>

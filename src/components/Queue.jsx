@@ -5,7 +5,8 @@ import { getAlbums } from "../api/Albums";
 import Tracks from "./Tracks";
 
 const Queue = () => {
-  const { currentAlbum, nowPlaying } = useContext(QueueContext);
+  const { currentAlbum, nowPlaying, isPlaylist, isArtist } =
+    useContext(QueueContext);
   const [tracks, setTracks] = useState([]);
   const [details, setDetails] = useState();
 
@@ -19,15 +20,17 @@ const Queue = () => {
   };
 
   useEffect(() => {
-    const fetchTracks = async () => {
-      const data = await getAlbums(albumsId);
+    if (!isPlaylist) {
+      const fetchTracks = async () => {
+        const data = await getAlbums(albumsId);
 
-      if (data) {
-        setTracks(data.tracks.items);
-        setDetails(data);
-      }
-    };
-    fetchTracks();
+        if (data) {
+          setTracks(data.tracks.items);
+          setDetails(data);
+        }
+      };
+      fetchTracks();
+    }
   }, [albumsId]);
 
   const getPlaylists = async (albumsId) => {
@@ -72,6 +75,25 @@ const Queue = () => {
     fetchTracks();
   }, [albumsId]);
 
+  useEffect(() => {
+    if (isArtist) {
+      const url = `https://api.spotify.com/v1/artists/${albumsId}/top-tracks`;
+
+      const fetchTracks = async () => {
+        const data = await getElements(url);
+
+        if (data) {
+          setTracks(data.tracks.items);
+          setDetails(data);
+        }
+      };
+      fetchTracks();
+    }
+  }, []);
+  console.log(tracks);
+
+  console.log(isArtist);
+
   return (
     <div className=" h-full w-full">
       <div className="flex flex-col items-center bg-orange-400 justify-center py-5 h-[40%] rounded-2xl">
@@ -98,19 +120,52 @@ const Queue = () => {
               className="flex justify-between items-center pr-3 hover:bg-slate-500 hover:text-white hover:shadow-md transition-all duration-300 p-1 rounded-md"
             >
               <div className="w-full">
-                <Tracks
-                  songname={track.name}
-                  id={track.id}
-                  songref={track.preview_url}
-                  duration={setDuration(track.duration_ms)}
-                  artist={track.artists.map((artist) => artist.name).join(", ")}
-                  sn={index + 1}
-                  songImage={
-                    track.images && track.images[1]
-                      ? track.images[1].url
-                      : details?.images[1]?.url
-                  }
-                />
+                {isPlaylist ? (
+                  <Tracks
+                    songname={track.track.name}
+                    id={track.track.id}
+                    songref={track.track.preview_url}
+                    duration={setDuration(track.track.duration_ms)}
+                    artist={track.track.artists
+                      .map((artist) => artist.name)
+                      .join(", ")}
+                    sn={index + 1}
+                    songImage={
+                      track?.track?.images && track?.track?.images[1]
+                        ? track?.images[1]?.url
+                        : details?.images[0]?.url
+                    }
+                  />
+                ) : (
+                  <Tracks
+                    songname={track?.name}
+                    id={track?.id}
+                    songref={track?.preview_url}
+                    duration={setDuration(track?.duration_ms)}
+                    artist={track?.artists
+                      ?.map((artist) => artist?.name)
+                      .join(", ")}
+                    sn={index + 1}
+                    songImage={
+                      track.images && track.images[1]
+                        ? track.images[1].url
+                        : details?.images[1]?.url
+                    }
+                  />
+                )}
+                {isArtist && (
+                  <Tracks
+                    songname={track.name}
+                    id={track.id}
+                    songref={track.preview_url}
+                    duration={setDuration(track.duration_ms)}
+                    artist={track.artists
+                      .map((artist) => artist.name)
+                      .join(", ")}
+                    sn={index + 1}
+                    songImage={artistDetails.images[1].url}
+                  />
+                )}
               </div>
             </li>
           ))}

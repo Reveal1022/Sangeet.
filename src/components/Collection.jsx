@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { getElements } from "../api/Spotify";
-import Albums from "../components/Albums";
 import Playlist from "../components/Playlist";
 
 const Collection = ({ url }) => {
-  console.log(url);
-
   const [data, setData] = useState();
 
   useEffect(() => {
@@ -20,10 +17,7 @@ const Collection = ({ url }) => {
     fetchData(); // You need to call the function here
   }, []);
 
-  console.log("data", data);
-
   const playlist = data?.playlists?.items;
-  console.log(playlist);
 
   return (
     <div className=" mt-[20px]">

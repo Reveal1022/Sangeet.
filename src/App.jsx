@@ -5,7 +5,6 @@ import Sidebar from "./components/Sidebar";
 import Player from "./components/Player";
 import Display from "./components/Display";
 import Queue from "./components/Queue";
-import Footer from "./components/Footer";
 
 const App = () => {
   const [isQueueOpen, setIsQueueOpen] = useState(false);

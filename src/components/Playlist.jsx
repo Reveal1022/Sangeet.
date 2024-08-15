@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { IoMdHeartEmpty, IoMdHeart } from "react-icons/io";
 import { SongContext } from "../AppContext.jsx";
 import { useNavigate } from "react-router-dom";
+import { QueueContext } from "../QueueContext.jsx";
 
 const Playlist = ({ artist, albumname, albumImage, playlistId }) => {
   // const {
@@ -42,6 +43,8 @@ const Playlist = ({ artist, albumname, albumImage, playlistId }) => {
   //   }
   // };
 
+  const { setCurrentAlbum, setIsPlaylist } = useContext(QueueContext);
+
   const navigate = useNavigate();
 
   return (
@@ -49,6 +52,9 @@ const Playlist = ({ artist, albumname, albumImage, playlistId }) => {
       className="flex flex-col hover:cursor-pointer w-[150px] text-left"
       onClick={() => {
         navigate(`/playlists/${playlistId}`);
+        setCurrentAlbum(playlistId);
+        setIsPlaylist(true);
+        setIsArtist(false);
       }}
     >
       <img
